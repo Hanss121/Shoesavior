@@ -1,0 +1,62 @@
+Tambahkan patch ini ke Code.gs agar halaman pesanan.html bisa mencari pesanan hanya dengan ID.
+
+1. Tambahkan route ini di doGet(e), sejajar dengan action getConfirmationData:
+
+if (action === "getOrderStatus") {
+  return jsonResponse_(
+    getPublicOrderStatus(params.orderId)
+  );
+}
+
+2. Opsional, tambahkan juga route ini di doPost(e):
+
+if (action === "getOrderStatus") {
+  return jsonResponse_(
+    getPublicOrderStatus(payload.orderId)
+  );
+}
+
+3. Tambahkan fungsi ini di bagian DETAIL KONFIRMASI CUSTOMER atau READ ORDER:
+
+function getPublicOrderStatus(orderId) {
+  try {
+    const cleanOrderId = String(orderId || "").trim();
+
+    if (!cleanOrderId) {
+      return {
+        success: false,
+        message: "Order ID wajib diisi."
+      };
+    }
+
+    const data = getDataRows_();
+
+    for (let i = 0; i < data.rows.length; i++) {
+      const row = data.rows[i];
+      const rowOrderId = String(row[0] || "").trim();
+
+      if (rowOrderId === cleanOrderId) {
+        const order = rowToPublicConfirmationObject_(row);
+
+        // Jangan kirim token konfirmasi ke halaman cek pesanan.
+        delete order.token_konfirmasi;
+
+        return {
+          success: true,
+          order: order
+        };
+      }
+    }
+
+    return {
+      success: false,
+      message: "Pesanan tidak ditemukan."
+    };
+
+  } catch (error) {
+    return {
+      success: false,
+      message: getErrorMessage_(error)
+    };
+  }
+}

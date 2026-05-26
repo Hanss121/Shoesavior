@@ -18,6 +18,7 @@ function highlightActiveNav() {
     "index.html": "nav-home",
     "": "nav-home",
     "layanan.html": "nav-services",
+    "pesanan.html": "nav-orders",
     "dashboard.html": "nav-dashboard",
     "konfirmasi.html": "nav-confirmation",
   };
