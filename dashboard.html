@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Owner - Shoesavior</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-[#0b0f19] text-slate-200 min-h-screen flex flex-col custom-scrollbar">
+
+  <nav class="sticky top-0 z-50 glassmorphism border-b border-slate-800/60 backdrop-blur-md no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center gap-3 cursor-pointer">
+          <div class="p-2.5 bg-gradient-to-tr from-sky-500 to-indigo-600 rounded-xl shadow-lg shadow-sky-500/20">
+            <i class="fa-solid fa-shoe-prints text-white text-xl transform -rotate-45"></i>
+          </div>
+          <span class="text-2xl font-bold tracking-tight text-white">
+            Shoe<span class="text-sky-400">savior</span>
+          </span>
+        </a>
+
+        <div class="hidden md:flex items-center space-x-2">
+          <a href="index.html" id="nav-home" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">Beranda</a>
+          <a href="layanan.html" id="nav-services" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">Pelayanan</a>
+          <a href="dashboard.html" id="nav-dashboard" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-sky-400 bg-slate-800/50">Dashboard</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="login-nav-btn" onclick="openLoginModal()" class="text-sm font-semibold text-slate-300 hover:text-white bg-slate-800/60 px-4 py-2 rounded-xl transition-all border border-slate-700/50 hover:border-slate-600">
+            <i class="fa-solid fa-lock mr-2 text-sky-400"></i>Admin Login
+          </button>
+
+          <button id="logout-nav-btn" onclick="handleLogout()" class="hidden text-sm font-semibold text-rose-400 hover:text-rose-300 bg-rose-950/30 px-4 py-2 rounded-xl transition-all border border-rose-900/50">
+            <i class="fa-solid fa-right-from-bracket mr-2"></i>Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-grow no-print">
+    <section class="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+          <h2 class="text-2xl font-bold text-white tracking-tight">Panel Utama Owner / Manajemen Antrean</h2>
+          <p class="text-xs text-slate-400 mt-1">Pantau, tinjau harga, modifikasi status pengerjaan, dan cetak nota transaksi customer.</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <button onclick="loadOrdersFromServer()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-bold">
+            <i class="fa-solid fa-rotate-right mr-1"></i>Refresh
+          </button>
+
+          <div class="relative w-full md:w-72">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
+            <input type="text" id="searchBar" onkeyup="filterTable()" class="w-full bg-[#131926] border border-slate-800 rounded-xl py-2 pl-9 pr-4 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-sky-500" placeholder="Cari ID / Nama Customer...">
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="glassmorphism rounded-2xl border border-slate-800 p-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Total Order</p>
+              <p id="summaryTotal" class="text-3xl font-black text-white mt-1">0</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center">
+              <i class="fa-solid fa-boxes-stacked"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="glassmorphism rounded-2xl border border-slate-800 p-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Butuh Tinjauan</p>
+              <p id="summaryReview" class="text-3xl font-black text-amber-400 mt-1">0</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="glassmorphism rounded-2xl border border-slate-800 p-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Dalam Proses</p>
+              <p id="summaryProcess" class="text-3xl font-black text-indigo-400 mt-1">0</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center">
+              <i class="fa-solid fa-soap"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="glassmorphism rounded-2xl border border-slate-800 p-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Selesai</p>
+              <p id="summaryDone" class="text-3xl font-black text-emerald-400 mt-1">0</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glassmorphism rounded-2xl overflow-hidden border border-slate-800 shadow-xl">
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-900/80 border-b border-slate-800/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <th class="py-4 px-5">ID Order</th>
+                <th class="py-4 px-4">Customer & Alamat</th>
+                <th class="py-4 px-4">Spesifikasi Sepatu</th>
+                <th class="py-4 px-4">Layanan & Pengiriman</th>
+                <th class="py-4 px-4">Visual Fisik</th>
+                <th class="py-4 px-4">Harga Final</th>
+                <th class="py-4 px-4 text-center">Status Alur</th>
+                <th class="py-4 px-5 text-right">Aksi Kontrol</th>
+              </tr>
+            </thead>
+            <tbody id="dashboardTableBody" class="divide-y divide-slate-800/50 text-xs text-slate-300">
+              <tr>
+                <td colspan="8" class="text-center py-8 text-slate-500 italic">Memuat data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-[#070a12] border-t border-slate-900 py-8 no-print">
+    <div class="max-w-7xl mx-auto px-4 text-center text-sm text-slate-500">
+      <p>&copy; 2026 <span class="text-slate-400 font-semibold">Shoesavior</span>. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <div id="loginModal" class="fixed inset-0 z-50 overflow-y-auto hidden no-print">
+    <div class="flex items-center justify-center min-h-screen px-4">
+      <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeLoginModal()"></div>
+      <div class="inline-block align-middle glassmorphism border border-slate-800 rounded-3xl overflow-hidden shadow-2xl transform transition-all max-w-sm w-full p-6 relative z-10">
+        <div class="text-center mb-6">
+          <div class="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center mx-auto mb-3">
+            <i class="fa-solid fa-user-gear text-sky-400 text-lg"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">Autentikasi Admin Owner</h3>
+          <p class="text-xs text-slate-400 mt-1">Gunakan kredensial admin dari API GAS untuk mengelola antrean Shoesavior.</p>
+        </div>
+
+        <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Username</label>
+            <input type="text" id="adminUser" required class="w-full bg-[#131926] border border-slate-800 rounded-xl py-2.5 px-3 text-xs text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" placeholder="admin">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Password</label>
+            <input type="password" id="adminPass" required class="w-full bg-[#131926] border border-slate-800 rounded-xl py-2.5 px-3 text-xs text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" placeholder="••••••••">
+          </div>
+          <div id="loginErrorText" class="hidden text-[11px] text-rose-400 font-medium bg-rose-950/20 p-2 rounded-lg border border-rose-900/30 text-center">
+            Kredensial salah. Silakan coba kembali.
+          </div>
+          <button id="adminLoginSubmitBtn" type="submit" class="w-full py-3 bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold text-xs rounded-xl shadow-lg transition-all">
+            Masuk ke System Dashboard
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="reviewModal" class="fixed inset-0 z-50 overflow-y-auto hidden no-print">
+    <div class="flex items-center justify-center min-h-screen px-4">
+      <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeReviewModal()"></div>
+      <div class="inline-block align-middle glassmorphism border border-slate-800 rounded-2xl overflow-hidden shadow-2xl transform transition-all max-w-sm w-full p-5 relative z-10">
+        <h3 class="text-base font-bold text-white mb-1">Tinjauan Kondisi & Ketetapan Harga</h3>
+        <p class="text-xs text-slate-400 mb-4">Tentukan harga akhir berdasarkan tingkat keparahan noda/kerusakan fisik sepatu.</p>
+
+        <input type="hidden" id="reviewOrderId">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Harga Ketetapan Akhir (Owner)</label>
+            <input type="number" id="reviewFinalPrice" class="w-full bg-[#131926] border border-slate-800 rounded-xl py-2 px-3 text-xs text-white focus:outline-none focus:border-sky-500" placeholder="Contoh: 65000">
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Catatan Tambahan Kondisi</label>
+            <textarea id="reviewNote" rows="2" class="w-full bg-[#131926] border border-slate-800 rounded-xl py-2 px-3 text-xs text-white focus:outline-none focus:border-sky-500" placeholder="Contoh: Midsole terkelupas tipis."></textarea>
+          </div>
+          <button onclick="submitPriceReview()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-lg transition-all">
+            Kirim Penetapan Harga ke Customer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="orderDetailModal" class="fixed inset-0 z-[60] overflow-y-auto hidden no-print">
+    <div class="min-h-screen px-4 py-8 flex items-center justify-center">
+      <div class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm" onclick="closeOrderDetailModal()"></div>
+
+      <div class="relative z-10 w-full max-w-5xl glassmorphism border border-slate-800 rounded-3xl shadow-2xl overflow-hidden">
+        <div class="flex items-start justify-between gap-4 p-6 border-b border-slate-800 bg-slate-950/40">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400">
+                <i class="fa-solid fa-clipboard-list"></i>
+              </span>
+              <h3 class="text-xl font-bold text-white">Detail Pesanan Customer</h3>
+            </div>
+            <p class="text-xs text-slate-400">Informasi lengkap pesanan, data customer, foto sepatu, harga, dan status pengerjaan.</p>
+          </div>
+
+          <button onclick="closeOrderDetailModal()" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-400 hover:text-white transition-all">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div id="orderDetailContent" class="p-6"></div>
+
+        <div id="orderDetailFooter" class="px-6 py-4 border-t border-slate-800 bg-slate-950/40 flex flex-wrap justify-end gap-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="invoiceModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <div class="flex items-center justify-center min-h-screen px-4 py-8">
+      <div class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm no-print" onclick="closeInvoiceModal()"></div>
+      <div id="invoicePrintArea" class="bg-white text-slate-900 rounded-2xl shadow-2xl max-w-sm w-full p-6 relative z-10 border border-slate-200 text-sm font-mono">
+        <div class="text-center border-b border-dashed border-slate-300 pb-4 mb-4">
+          <h2 class="text-xl font-black tracking-tight">SHOESAVIOR</h2>
+          <p class="text-[10px] text-slate-500 mt-1">Premium Shoe Care & Cleaning</p>
+        </div>
+
+        <div class="space-y-1 text-xs border-b border-dashed border-slate-300 pb-4 mb-4">
+          <div class="flex justify-between"><span>ID:</span><span id="invId" class="font-bold"></span></div>
+          <div class="flex justify-between"><span>Tanggal:</span><span id="invDate"></span></div>
+          <div class="flex justify-between"><span>Customer:</span><span id="invCust" class="font-bold"></span></div>
+          <div><span>Alamat:</span> <span id="invAddress"></span></div>
+        </div>
+
+        <div class="space-y-2 text-xs border-b border-dashed border-slate-300 pb-4 mb-4">
+          <div class="font-bold text-sm" id="invShoe"></div>
+          <div class="flex justify-between">
+            <span id="invService"></span>
+            <span id="invPrice"></span>
+          </div>
+          <div class="text-[11px] text-slate-500">Metode: <span id="invDelivery" class="text-slate-700"></span></div>
+        </div>
+
+        <div class="space-y-1 text-xs border-b border-dashed border-slate-300 pb-4 mb-4">
+          <div class="flex justify-between text-base font-bold text-slate-900">
+            <span>TOTAL BAYAR:</span>
+            <span id="invTotal"></span>
+          </div>
+        </div>
+
+        <div class="text-center text-[10px] text-slate-500 space-y-1">
+          <p class="font-bold text-slate-800">Status Nota: LUNAS / SELESAI</p>
+          <p>Terima kasih telah memercayakan sepatu Anda kepada Shoesavior.</p>
+          <p class="mt-4 border border-slate-200 rounded p-1 inline-block bg-slate-50 text-slate-600 font-sans px-2">KODE RESMI SISTEM AUTOMATION</p>
+        </div>
+
+        <div class="mt-6 flex gap-2 no-print">
+          <button onclick="window.print()" class="flex-1 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-all font-sans"><i class="fa-solid fa-print mr-1"></i>Cetak Sekarang</button>
+          <button onclick="closeInvoiceModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl transition-all font-sans">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/dashboard.js"></script>
+</body>
+</html>

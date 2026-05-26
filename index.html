@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shoesavior - Premium Shoe Care & Cleaning</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-[#0b0f19] text-slate-200 min-h-screen flex flex-col custom-scrollbar">
+
+  <nav class="sticky top-0 z-50 glassmorphism border-b border-slate-800/60 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center gap-3 cursor-pointer">
+          <div class="p-2.5 bg-gradient-to-tr from-sky-500 to-indigo-600 rounded-xl shadow-lg shadow-sky-500/20">
+            <i class="fa-solid fa-shoe-prints text-white text-xl transform -rotate-45"></i>
+          </div>
+          <span class="text-2xl font-bold tracking-tight text-white">
+            Shoe<span class="text-sky-400">savior</span>
+          </span>
+        </a>
+
+        <div class="hidden md:flex items-center space-x-2">
+          <a href="index.html" id="nav-home" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-sky-400 bg-slate-800/50">Beranda</a>
+          <a href="layanan.html" id="nav-services" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">Pelayanan</a>
+          <a href="dashboard.html" id="nav-dashboard" data-nav-link class="hidden px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">Dashboard</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="login-nav-btn" onclick="goToAdmin()" class="text-sm font-semibold text-slate-300 hover:text-white bg-slate-800/60 px-4 py-2 rounded-xl transition-all border border-slate-700/50 hover:border-slate-600">
+            <i class="fa-solid fa-lock mr-2 text-sky-400"></i>Admin Login
+          </button>
+
+          <button id="logout-nav-btn" onclick="handleLogout()" class="hidden text-sm font-semibold text-rose-400 hover:text-rose-300 bg-rose-950/30 px-4 py-2 rounded-xl transition-all border border-rose-900/50">
+            <i class="fa-solid fa-right-from-bracket mr-2"></i>Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-grow">
+    <section class="relative py-24 overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.08),transparent_45%)]"></div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div class="text-center max-w-3xl mx-auto">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 mb-6 border border-sky-500/20">
+            <i class="fa-solid fa-sparkles text-[10px]"></i> #1 Premium Shoe Spa & Treatment
+          </span>
+          <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+            Kembalikan Kilau Sempurna <br><span class="text-gradient">Sepatu Kesayangan Anda</span>
+          </h1>
+          <p class="text-lg text-slate-400 mb-10 leading-relaxed">
+            Shoesavior menghadirkan metode perawatan profesional, menggunakan bahan premium khusus untuk memulihkan tekstur, warna, dan kebersihan sepatu Anda hingga tampak seperti baru kembali.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="layanan.html" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-semibold rounded-2xl shadow-xl shadow-sky-500/20 transform transition-all hover:-translate-y-0.5">
+              <i class="fa-solid fa-clipboard-list mr-2"></i>Pesan Layanan Sekarang
+            </a>
+            <a href="#about-section" class="w-full sm:w-auto px-8 py-4 bg-slate-800/70 hover:bg-slate-800 text-slate-200 font-semibold rounded-2xl transition-all border border-slate-700/60 text-center">
+              Pelajari Metode Kami
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 bg-slate-900/40 border-y border-slate-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-2xl sm:text-3xl font-bold text-white">Hasil Nyata Perawatan Kami</h2>
+          <p class="text-slate-400 text-sm mt-2">Transformasi kebersihan mutlak yang diproses langsung oleh spesialis kami.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="glassmorphism rounded-2xl overflow-hidden group border border-slate-800">
+            <div class="grid grid-cols-2 gap-0.5 bg-slate-900 relative">
+              <div class="relative overflow-hidden aspect-square">
+                <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=500&q=80" class="object-cover w-full h-full filter grayscale contrast-125 brightness-75 scale-105" alt="Before">
+                <span class="absolute top-3 left-3 bg-rose-500/90 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Before</span>
+              </div>
+              <div class="relative overflow-hidden aspect-square">
+                <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=500&q=80" class="object-cover w-full h-full transition-transform group-hover:scale-105 duration-500" alt="After">
+                <span class="absolute top-3 right-3 bg-emerald-500/90 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">After</span>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-semibold text-white text-base">Canvas & Knit Deep Clean</h3>
+              <p class="text-xs text-slate-400 mt-1">Pembersihan kerak noda membandel hingga serat kain terdalam.</p>
+            </div>
+          </div>
+
+          <div class="glassmorphism rounded-2xl overflow-hidden group border border-slate-800">
+            <div class="grid grid-cols-2 gap-0.5 bg-slate-900 relative">
+              <div class="relative overflow-hidden aspect-square">
+                <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=500&q=80" class="object-cover w-full h-full sepia contrast-150 brightness-50 scale-105" alt="Before">
+                <span class="absolute top-3 left-3 bg-rose-500/90 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Before</span>
+              </div>
+              <div class="relative overflow-hidden aspect-square">
+                <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=500&q=80" class="object-cover w-full h-full transition-transform group-hover:scale-105 duration-500" alt="After">
+                <span class="absolute top-3 right-3 bg-emerald-500/90 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">After</span>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-semibold text-white text-base">Unyellowing Soles</h3>
+              <p class="text-xs text-slate-400 mt-1">Mengembalikan warna putih asli sol karet yang menguning akibat oksidasi.</p>
+            </div>
+          </div>
+
+          <div class="glassmorphism rounded-2xl overflow-hidden group border border-slate-800">
+            <div class="grid grid-cols-2 gap-0.5 bg-slate-900 relative">
+              <div class="relative overflow-hidden aspect-square">
+                <img src="https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&w=500&q=80" class="object-cover w-full h-full opacity-40 blur-[1px] scale-105" alt="Before">
+                <span class="absolute top-3 left-3 bg-rose-500/90 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Before</span>
+              </div>
+              <div class="relative overflow-hidden aspect-square">
+                <img src="https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&w=500&q=80" class="object-cover w-full h-full transition-transform group-hover:scale-105 duration-500" alt="After">
+                <span class="absolute top-3 right-3 bg-emerald-500/90 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">After</span>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-semibold text-white text-base">Premium Leather Treatment</h3>
+              <p class="text-xs text-slate-400 mt-1">Nutrisi ekstra untuk kulit sepatu asli agar tetap lentur, bersih, dan berkilau.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about-section" class="py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <span class="text-xs font-bold text-sky-400 tracking-wider uppercase block mb-2">Mengapa Memilih Kami</span>
+            <h2 class="text-3xl font-bold text-white mb-6">Dedikasi Penuh Untuk Estetika & Keawetan Alas Kaki Anda</h2>
+            <p class="text-slate-400 leading-relaxed mb-6">
+              Di Shoesavior, setiap pasangan sepatu ditangani secara individual dengan formula cairan khusus yang disesuaikan dengan jenis bahan sepatu Anda.
+            </p>
+
+            <div class="space-y-4">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center shrink-0 border border-sky-500/20">
+                  <i class="fa-solid fa-hand-holding-heart text-sky-400"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-white text-sm">Bahan Pembersih Premium 100% Aman</h4>
+                  <p class="text-xs text-slate-400 mt-0.5">Formula pembersih aman untuk warna asli dan serat kain.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0 border border-indigo-500/20">
+                  <i class="fa-solid fa-user-shield text-indigo-400"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-white text-sm">Diproses oleh Teknisi Berpengalaman</h4>
+                  <p class="text-xs text-slate-400 mt-0.5">Material sensitif seperti suede, nubuck, dan leather ditangani dengan metode khusus.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                  <i class="fa-solid fa-truck-ramp-box text-emerald-400"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-white text-sm">Layanan Antar-Jemput Praktis</h4>
+                  <p class="text-xs text-slate-400 mt-0.5">Sepatu bisa diantar sendiri, dijemput owner, atau dikirim kurir.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative flex justify-center">
+            <div class="absolute inset-0 bg-gradient-to-tr from-sky-500/10 to-transparent rounded-3xl blur-2xl"></div>
+            <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=700&q=80" class="rounded-3xl object-cover shadow-2xl border border-slate-800 relative z-10 w-full max-w-md h-[450px]" alt="Shoe Cleaning Process">
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-[#070a12] border-t border-slate-900 py-8">
+    <div class="max-w-7xl mx-auto px-4 text-center text-sm text-slate-500">
+      <p>&copy; 2026 <span class="text-slate-400 font-semibold">Shoesavior</span>. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/common.js"></script>
+</body>
+</html>
