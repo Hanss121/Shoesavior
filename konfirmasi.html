@@ -1,92 +1,134 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Konfirmasi Pesanan - Shoesavior</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Konfirmasi Pesanan - Shoesavior</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body class="light-page min-h-screen flex flex-col custom-scrollbar">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body class="light-page min-h-screen flex flex-col custom-scrollbar">
+    <nav class="sticky top-0 z-50 site-nav">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+          <a href="index.html" class="flex items-center gap-3 cursor-pointer">
+            <img src="assets/img/logo-shoesavior.png" class="brand-logo" alt="Shoesavior logo" />
+            <span>
+              <span class="brand-wordmark">Shoesavior</span>
+              <span class="brand-submark">Shoe care studio</span>
+            </span>
+          </a>
 
-  <nav class="sticky top-0 z-50 site-nav">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
-        <a href="index.html" class="flex items-center gap-3 cursor-pointer">
-          <img src="assets/img/logo-shoesavior.png" class="brand-logo" alt="Shoesavior logo">
-          <span>
-            <span class="brand-wordmark">Shoesavior</span>
-            <span class="brand-submark">Shoe care studio</span>
-          </span>
-        </a>
+          <div class="hidden md:flex items-center space-x-2">
+            <a href="index.html" id="nav-home" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">Beranda</a>
+            <a href="layanan.html" id="nav-services" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">Pelayanan</a>
+            <a href="dashboard.html" id="nav-dashboard" data-nav-link class="hidden px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">Dashboard</a>
+          </div>
 
-        <div class="hidden md:flex items-center space-x-2">
-          <a href="index.html" id="nav-home" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">Beranda</a>
-          <a href="layanan.html" id="nav-services" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">Pelayanan</a>
-          <a href="dashboard.html" id="nav-dashboard" data-nav-link class="hidden px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">Dashboard</a>
+          <div class="hidden md:block w-36"></div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="flex-grow">
+      <section class="py-16 px-4 section-cream">
+        <div class="max-w-2xl mx-auto">
+          <div class="text-center mb-8">
+            <span class="process-chip inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold mb-4"> <i class="fa-solid fa-file-signature"></i> Konfirmasi Customer </span>
+            <h1 class="text-4xl sm:text-5xl font-black text-neutral-950 leading-none">Konfirmasi Pesanan</h1>
+            <p class="text-sm text-neutral-600 mt-4">Periksa detail harga final sebelum menyetujui proses perawatan sepatu.</p>
+          </div>
+
+          <div class="confirm-card">
+            <div class="confirm-card-header">
+              <div class="confirm-card-icon">
+                <i class="fa-solid fa-clipboard-check"></i>
+              </div>
+              <div>
+                <h2>Detail Pesanan</h2>
+                <p>Data di bawah berasal dari sistem Shoesavior.</p>
+              </div>
+            </div>
+
+            <div id="customerConfirmContent" class="confirm-card-body">Memuat detail pesanan...</div>
+
+            <div id="customerConfirmActions" class="confirm-card-actions hidden">
+              <button id="cancelBtn" onclick="submitCustomerConfirmation('cancel')" class="confirm-btn confirm-btn-cancel">
+                <i class="fa-solid fa-xmark"></i>
+                Batalkan
+              </button>
+
+              <button id="approveBtn" onclick="submitCustomerConfirmation('approve')" class="confirm-btn confirm-btn-approve">
+                <i class="fa-solid fa-check"></i>
+                Setuju Pesanan
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer py-8">
+      <div class="max-w-7xl mx-auto px-4 flex items-center justify-between gap-4 text-sm">
+        <p>&copy; 2026 <span class="text-white font-black">SHOESAVIOR</span></p>
+        <div class="flex items-center gap-3">
+          <span id="footer-admin-label" class="hidden sm:inline text-xs uppercase font-bold">Admin nonaktif</span>
+          <button id="footer-admin-btn" onclick="handleFooterAdminClick()" class="footer-admin" type="button" aria-label="Login admin" title="Admin nonaktif">
+            <i class="fa-solid fa-lock text-xs"></i>
+            <span id="footer-admin-status" class="admin-status-dot admin-status-offline"></span>
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- CUSTOMER DECISION MODAL -->
+    <div id="customerDecisionModal" class="customer-modal hidden">
+      <div class="customer-modal-backdrop" onclick="closeCustomerDecisionModal()"></div>
+
+      <div class="customer-modal-panel">
+        <div id="customerDecisionIcon" class="customer-modal-icon">
+          <i class="fa-solid fa-circle-question"></i>
         </div>
 
-        <div class="hidden md:block w-36"></div>
+        <h3 id="customerDecisionTitle">Konfirmasi Pesanan</h3>
+        <p id="customerDecisionMessage">Pastikan data pesanan sudah benar.</p>
+
+        <input type="hidden" id="customerDecisionValue" />
+
+        <div class="customer-modal-actions">
+          <button type="button" onclick="closeCustomerDecisionModal()" class="customer-modal-cancel">Kembali</button>
+
+          <button type="button" id="customerDecisionSubmitBtn" onclick="confirmCustomerDecision()" class="customer-modal-submit">Ya, Lanjutkan</button>
+        </div>
       </div>
     </div>
-  </nav>
 
-  <main class="flex-grow">
-    <section class="py-16 px-4 section-cream">
-      <div class="max-w-2xl mx-auto">
-        <div class="text-center mb-8">
-          <span class="process-chip inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold mb-4">
-            <i class="fa-solid fa-file-signature"></i> Konfirmasi Customer
-          </span>
-          <h1 class="text-4xl sm:text-5xl font-black text-neutral-950 leading-none">Konfirmasi Pesanan</h1>
-          <p class="text-sm text-neutral-600 mt-4">Periksa detail harga final sebelum menyetujui proses perawatan sepatu.</p>
+    <!-- CUSTOMER SUCCESS MODAL -->
+    <div id="customerSuccessModal" class="customer-modal hidden">
+      <div class="customer-modal-backdrop"></div>
+
+      <div class="customer-modal-panel">
+        <div id="customerSuccessIcon" class="customer-modal-icon customer-modal-icon-success">
+          <i class="fa-solid fa-circle-check"></i>
         </div>
 
-        <div class="glassmorphism rounded-3xl border border-slate-800 shadow-2xl overflow-hidden">
-          <div class="p-6 border-b border-slate-800 bg-slate-950/30">
-            <h2 class="text-xl font-bold text-white">Detail Pesanan</h2>
-            <p class="text-xs text-slate-400 mt-1">Data di bawah berasal dari sistem Shoesavior.</p>
-          </div>
+        <h3 id="customerSuccessTitle">Berhasil</h3>
+        <p id="customerSuccessMessage">Status pesanan berhasil diperbarui.</p>
 
-          <div id="customerConfirmContent" class="p-6 text-sm text-slate-300">
-            Memuat detail pesanan...
-          </div>
-
-          <div id="customerConfirmActions" class="hidden p-6 border-t border-slate-800 bg-slate-950/30 flex flex-col sm:flex-row gap-3 justify-end">
-            <button id="cancelBtn" onclick="submitCustomerConfirmation('cancel')" class="px-5 py-3 rounded-xl bg-rose-950/50 text-rose-300 border border-rose-900 hover:bg-rose-900/60 font-semibold text-sm">
-              <i class="fa-solid fa-xmark mr-1"></i>Batalkan
-            </button>
-
-            <button id="approveBtn" onclick="submitCustomerConfirmation('approve')" class="px-5 py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-sm">
-              <i class="fa-solid fa-check mr-1"></i>Setuju Pesanan
-            </button>
-          </div>
+        <div class="customer-modal-actions single">
+          <a href="index.html" class="customer-modal-submit"> Kembali ke Beranda </a>
         </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer py-8">
-    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between gap-4 text-sm">
-      <p>&copy; 2026 <span class="text-white font-black">SHOESAVIOR</span></p>
-      <div class="flex items-center gap-3">
-        <span id="footer-admin-label" class="hidden sm:inline text-xs uppercase font-bold">Admin nonaktif</span>
-        <button id="footer-admin-btn" onclick="handleFooterAdminClick()" class="footer-admin" type="button" aria-label="Login admin" title="Admin nonaktif">
-          <i class="fa-solid fa-lock text-xs"></i>
-          <span id="footer-admin-status" class="admin-status-dot admin-status-offline"></span>
-        </button>
       </div>
     </div>
-  </footer>
 
-  <script src="assets/js/api.js"></script>
-  <script src="assets/js/utils.js"></script>
-  <script src="assets/js/common.js"></script>
-  <script src="assets/js/konfirmasi.js"></script>
-</body>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/common.js"></script>
+    <script src="assets/js/konfirmasi.js"></script>
+  </body>
 </html>

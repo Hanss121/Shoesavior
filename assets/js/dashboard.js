@@ -413,8 +413,70 @@ function filterTable() {
 /* =========================
    STATUS UPDATE
 ========================= */
+function changeStatus(orderId, newStatus) {
+  const order = ordersState.find((o) => String(o.order_id) === String(orderId));
 
-async function changeStatus(orderId, newStatus) {
+  if (!order) {
+    alert("Data pesanan tidak ditemukan.");
+    return;
+  }
+
+  const modal = document.getElementById("statusConfirmModal");
+  const orderIdInput = document.getElementById("statusConfirmOrderId");
+  const newStatusInput = document.getElementById("statusConfirmNewStatus");
+
+  const orderTitle = document.getElementById("statusConfirmOrderTitle");
+  const customerName = document.getElementById("statusConfirmCustomerName");
+  const currentStatus = document.getElementById("statusConfirmCurrentStatus");
+  const targetStatus = document.getElementById("statusConfirmTargetStatus");
+  const submitBtn = document.getElementById("statusConfirmSubmitBtn");
+
+  if (orderIdInput) orderIdInput.value = orderId;
+  if (newStatusInput) newStatusInput.value = newStatus;
+
+  if (orderTitle) orderTitle.innerText = order.order_id || "-";
+  if (customerName) customerName.innerText = order.nama_customer || "-";
+  if (currentStatus) currentStatus.innerText = order.status || "Menunggu Tinjauan";
+  if (targetStatus) targetStatus.innerText = newStatus;
+
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = `Ya, Ubah Status`;
+  }
+
+  if (modal) {
+    document.body.appendChild(modal);
+    modal.classList.remove("hidden");
+  }
+}
+
+function closeStatusConfirmModal() {
+  const modal = document.getElementById("statusConfirmModal");
+  const submitBtn = document.getElementById("statusConfirmSubmitBtn");
+
+  if (modal) modal.classList.add("hidden");
+
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = `Ya, Ubah Status`;
+  }
+}
+
+async function submitStatusChange() {
+  const orderId = document.getElementById("statusConfirmOrderId")?.value;
+  const newStatus = document.getElementById("statusConfirmNewStatus")?.value;
+  const submitBtn = document.getElementById("statusConfirmSubmitBtn");
+
+  if (!orderId || !newStatus) {
+    alert("Data perubahan status tidak lengkap.");
+    return;
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Mengubah...`;
+  }
+
   try {
     const response = await apiAdminPost("updateOrderStatus", {
       orderId,
@@ -424,12 +486,18 @@ async function changeStatus(orderId, newStatus) {
     });
 
     if (response && response.success) {
+      closeStatusConfirmModal();
       await loadOrdersFromServer();
     } else {
       alert("Gagal mengubah status: " + ((response && response.message) || "Tidak diketahui."));
     }
   } catch (error) {
     alert("Error koneksi saat ubah status: " + error.message);
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `Ya, Ubah Status`;
+    }
   }
 }
 
@@ -540,15 +608,66 @@ function openWhatsappConfirmation(orderId) {
   window.open(order.whatsapp_url, "_blank");
 }
 
-function copyConfirmationLink(orderId) {
+async function copyConfirmationLink(orderId) {
   const order = ordersState.find((o) => String(o.order_id) === String(orderId));
 
   if (!order || !order.confirm_url) {
-    alert("Link konfirmasi tidak tersedia.");
+    showDashboardToast("Gagal", "Link konfirmasi tidak tersedia.", "error");
     return;
   }
 
-  copyText(order.confirm_url, "Link konfirmasi berhasil disalin.");
+  try {
+    await copyToClipboard(order.confirm_url);
+    showDashboardToast("Berhasil", "Link konfirmasi berhasil disalin.");
+  } catch (error) {
+    showDashboardToast("Gagal", "Browser tidak mengizinkan salin otomatis.", "error");
+  }
+}
+
+async function copyToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  textarea.style.top = "-9999px";
+
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  const success = document.execCommand("copy");
+  document.body.removeChild(textarea);
+
+  if (!success) {
+    throw new Error("Copy failed");
+  }
+}
+
+let dashboardToastTimer = null;
+
+function showDashboardToast(title, message, type = "success") {
+  const toast = document.getElementById("dashboardToast");
+  const toastTitle = document.getElementById("dashboardToastTitle");
+  const toastMessage = document.getElementById("dashboardToastMessage");
+
+  if (!toast) return;
+
+  if (toastTitle) toastTitle.innerText = title;
+  if (toastMessage) toastMessage.innerText = message;
+
+  toast.classList.toggle("is-error", type === "error");
+  toast.classList.add("is-show");
+
+  clearTimeout(dashboardToastTimer);
+
+  dashboardToastTimer = setTimeout(() => {
+    toast.classList.remove("is-show");
+  }, 2200);
 }
 
 /* =========================

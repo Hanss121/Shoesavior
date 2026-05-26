@@ -282,6 +282,61 @@
       </div>
     </div>
 
+    <div id="statusConfirmModal" class="fixed inset-0 z-[70] overflow-y-auto hidden no-print">
+      <div class="flex items-center justify-center min-h-screen px-4 py-8">
+        <div class="fixed inset-0 status-confirm-backdrop" onclick="closeStatusConfirmModal()"></div>
+
+        <div class="status-confirm-panel relative z-10">
+          <div class="status-confirm-header">
+            <div class="status-confirm-icon">
+              <i class="fa-solid fa-arrows-rotate"></i>
+            </div>
+
+            <div>
+              <h3>Konfirmasi Perubahan Status</h3>
+              <p>Pastikan status pesanan sudah sesuai sebelum diperbarui.</p>
+            </div>
+          </div>
+
+          <div class="status-confirm-body">
+            <input type="hidden" id="statusConfirmOrderId" />
+            <input type="hidden" id="statusConfirmNewStatus" />
+
+            <div class="status-confirm-order">
+              <span>Pesanan</span>
+              <strong id="statusConfirmOrderTitle">-</strong>
+              <small id="statusConfirmCustomerName">-</small>
+            </div>
+
+            <div class="status-confirm-flow">
+              <div>
+                <span>Status saat ini</span>
+                <strong id="statusConfirmCurrentStatus">-</strong>
+              </div>
+
+              <i class="fa-solid fa-arrow-right"></i>
+
+              <div>
+                <span>Status baru</span>
+                <strong id="statusConfirmTargetStatus">-</strong>
+              </div>
+            </div>
+
+            <div class="status-confirm-note">
+              <i class="fa-solid fa-circle-info"></i>
+              <p>Setelah dikonfirmasi, status akan diperbarui di Spreadsheet dan dashboard akan dimuat ulang.</p>
+            </div>
+
+            <div class="status-confirm-actions">
+              <button type="button" class="status-confirm-cancel" onclick="closeStatusConfirmModal()">Batal</button>
+
+              <button type="button" id="statusConfirmSubmitBtn" class="status-confirm-submit" onclick="submitStatusChange()">Ya, Ubah Status</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="invoiceModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
       <div class="flex items-center justify-center min-h-screen px-4 py-8">
         <div class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm no-print" onclick="closeInvoiceModal()"></div>
@@ -325,6 +380,16 @@
             <button onclick="closeInvoiceModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl transition-all font-sans">Tutup</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div id="dashboardToast" class="dashboard-toast" aria-live="polite">
+      <div class="dashboard-toast-icon">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <div>
+        <strong id="dashboardToastTitle">Berhasil</strong>
+        <span id="dashboardToastMessage">Link berhasil disalin.</span>
       </div>
     </div>
 

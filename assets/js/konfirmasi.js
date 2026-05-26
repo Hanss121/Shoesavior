@@ -28,9 +28,9 @@ async function loadCustomerConfirmation(orderId, token) {
 
   if (content) {
     content.innerHTML = `
-      <div class="text-center py-12 text-slate-400">
-        <i class="fa-solid fa-spinner fa-spin text-2xl mb-3 block"></i>
-        Memuat detail pesanan...
+      <div class="confirm-loading">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <span>Memuat detail pesanan...</span>
       </div>
     `;
   }
@@ -40,7 +40,7 @@ async function loadCustomerConfirmation(orderId, token) {
   try {
     const response = await apiGet("getConfirmationData", {
       orderId,
-      token
+      token,
     });
 
     if (!response || !response.success) {
@@ -61,12 +61,12 @@ function renderConfirmationError(message) {
 
   if (content) {
     content.innerHTML = `
-      <div class="rounded-2xl border border-rose-500/20 bg-rose-500/10 p-5 text-center">
-        <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-rose-500/15 text-rose-400 flex items-center justify-center">
-          <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+      <div class="confirm-error-box">
+        <div class="confirm-error-icon">
+          <i class="fa-solid fa-triangle-exclamation"></i>
         </div>
-        <h3 class="text-lg font-bold text-white mb-2">Konfirmasi Tidak Bisa Dibuka</h3>
-        <p class="text-sm text-rose-200/80 leading-relaxed">${escapeHtml(message)}</p>
+        <h3>Konfirmasi Tidak Bisa Dibuka</h3>
+        <p>${escapeHtml(message)}</p>
       </div>
     `;
   }
@@ -82,84 +82,153 @@ function renderCustomerConfirmationDetail(order) {
 
   if (content) {
     content.innerHTML = `
-      <div class="space-y-5">
-        ${imageUrl ? `
-          <div class="rounded-3xl overflow-hidden border border-slate-800 bg-slate-950">
-            <img src="${escapeHtml(imageUrl)}" class="w-full h-56 object-cover" alt="Foto sepatu">
-          </div>
-        ` : ""}
+      <div class="confirm-detail">
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div class="bg-slate-900/70 rounded-2xl p-4 border border-slate-800">
-            <div class="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">Kode Pesanan</div>
-            <div class="font-mono font-black text-sky-400 mt-1">${escapeHtml(order.order_id || "-")}</div>
+        ${
+          imageUrl
+            ? `
+          <div class="confirm-image-wrap">
+            <img
+              src="${escapeHtml(imageUrl)}"
+              class="confirm-image"
+              alt="Foto sepatu"
+              onerror="this.parentElement.classList.add('confirm-image-error'); this.remove();"
+            >
+          </div>
+        `
+            : ""
+        }
+
+        <div class="confirm-summary-grid">
+          <div class="confirm-summary-card">
+            <span>Kode Pesanan</span>
+            <strong class="mono">${escapeHtml(order.order_id || "-")}</strong>
           </div>
 
-          <div class="bg-slate-900/70 rounded-2xl p-4 border border-slate-800">
-            <div class="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">Status</div>
-            <div class="font-bold text-white mt-1">${escapeHtml(order.status || "-")}</div>
+          <div class="confirm-summary-card">
+            <span>Status</span>
+            <strong>${escapeHtml(order.status || "-")}</strong>
           </div>
         </div>
 
-        <div class="rounded-3xl border border-slate-800 bg-slate-900/50 p-5 space-y-3 text-sm leading-relaxed">
+        <div class="confirm-info-card">
           ${detailRow("Nama", order.nama_customer)}
           ${detailRow("Alamat", order.alamat)}
           ${detailRow("Sepatu", order.merek_jenis_sepatu)}
           ${detailRow("Layanan", order.layanan)}
           ${detailRow("Pengiriman", order.metode_pengiriman)}
           ${detailRow("Harga Estimasi", order.harga_estimasi)}
-          ${detailRow("Harga Final Owner", order.harga_final_owner, "text-sky-400 font-black")}
+          ${detailRow("Harga Final Owner", order.harga_final_owner, "confirm-price")}
           ${detailRow("Catatan Owner", order.catatan_owner)}
         </div>
 
-        ${canConfirm ? `
-          <div class="rounded-2xl border border-sky-500/20 bg-sky-500/10 p-4 text-sm text-sky-100 leading-relaxed">
-            <i class="fa-solid fa-circle-info mr-1 text-sky-400"></i>
-            Jika Anda menyetujui harga final, pesanan akan masuk ke antrean pengerjaan. Jika tidak setuju, pesanan akan dibatalkan.
+        ${
+          canConfirm
+            ? `
+          <div class="confirm-note confirm-note-info">
+            <i class="fa-solid fa-circle-info"></i>
+            <p>Jika Anda menyetujui harga final, pesanan akan masuk ke antrean pengerjaan. Jika tidak setuju, pesanan akan dibatalkan.</p>
           </div>
-        ` : `
-          <div class="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4 text-sm text-amber-100 leading-relaxed">
-            <i class="fa-solid fa-lock mr-1 text-amber-400"></i>
-            Pesanan ini sudah tidak bisa dikonfirmasi lagi melalui link ini.
+        `
+            : `
+          <div class="confirm-note confirm-note-warning">
+            <i class="fa-solid fa-lock"></i>
+            <p>Pesanan ini sudah tidak bisa dikonfirmasi lagi melalui link ini.</p>
           </div>
-        `}
+        `
+        }
       </div>
     `;
   }
 
   if (actions) {
-    if (canConfirm) {
-      actions.classList.remove("hidden");
-    } else {
-      actions.classList.add("hidden");
-    }
+    actions.classList.toggle("hidden", !canConfirm);
   }
 }
 
-function detailRow(label, value, extraClass = "text-slate-200") {
+function detailRow(label, value, extraClass = "") {
   return `
-    <div class="grid grid-cols-[130px,1fr] gap-3 border-b border-slate-800/70 last:border-b-0 pb-3 last:pb-0">
-      <span class="text-slate-500">${escapeHtml(label)}</span>
-      <span class="${extraClass}">${displayValue(value)}</span>
+    <div class="confirm-detail-row">
+      <span>${escapeHtml(label)}</span>
+      <strong class="${extraClass}">${displayValue(value)}</strong>
     </div>
   `;
 }
 
-async function submitCustomerConfirmation(decision) {
+function submitCustomerConfirmation(decision) {
   if (!confirmationOrderId || !confirmationToken) {
-    alert("Data konfirmasi tidak lengkap.");
+    showCustomerSuccessModal("Data Tidak Lengkap", "Data konfirmasi tidak lengkap. Silakan buka ulang link konfirmasi.", false);
     return;
   }
 
   const isApprove = decision === "approve";
-  const confirmMessage = isApprove
-    ? "Setujui harga final dan lanjutkan pesanan?"
-    : "Batalkan pesanan ini?";
 
-  if (!confirm(confirmMessage)) return;
+  const modal = document.getElementById("customerDecisionModal");
+  const decisionInput = document.getElementById("customerDecisionValue");
+  const title = document.getElementById("customerDecisionTitle");
+  const message = document.getElementById("customerDecisionMessage");
+  const icon = document.getElementById("customerDecisionIcon");
+  const submitBtn = document.getElementById("customerDecisionSubmitBtn");
+
+  if (decisionInput) decisionInput.value = decision;
+
+  if (title) {
+    title.innerText = isApprove ? "Setujui Pesanan?" : "Batalkan Pesanan?";
+  }
+
+  if (message) {
+    message.innerText = isApprove ? "Pesanan akan masuk ke antrean pengerjaan setelah Anda menyetujui harga final." : "Pesanan akan dibatalkan dan tidak masuk ke antrean pengerjaan.";
+  }
+
+  if (icon) {
+    icon.className = isApprove ? "customer-modal-icon customer-modal-icon-success" : "customer-modal-icon customer-modal-icon-danger";
+
+    icon.innerHTML = isApprove ? `<i class="fa-solid fa-circle-check"></i>` : `<i class="fa-solid fa-circle-xmark"></i>`;
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = isApprove ? `Ya, Setujui` : `Ya, Batalkan`;
+
+    submitBtn.classList.toggle("danger", !isApprove);
+  }
+
+  if (modal) {
+    document.body.appendChild(modal);
+    modal.classList.remove("hidden");
+  }
+}
+
+function closeCustomerDecisionModal() {
+  const modal = document.getElementById("customerDecisionModal");
+  const submitBtn = document.getElementById("customerDecisionSubmitBtn");
+
+  if (modal) modal.classList.add("hidden");
+
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = `Ya, Lanjutkan`;
+    submitBtn.classList.remove("danger");
+  }
+}
+
+async function confirmCustomerDecision() {
+  const decisionInput = document.getElementById("customerDecisionValue");
+  const submitBtn = document.getElementById("customerDecisionSubmitBtn");
+  const decision = decisionInput ? decisionInput.value : "";
+
+  if (!decision) {
+    showCustomerSuccessModal("Gagal", "Pilihan konfirmasi tidak ditemukan.", false);
+    return;
+  }
 
   const approveBtn = document.getElementById("approveBtn");
   const cancelBtn = document.getElementById("cancelBtn");
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Memproses...`;
+  }
 
   if (approveBtn) approveBtn.disabled = true;
   if (cancelBtn) cancelBtn.disabled = true;
@@ -168,21 +237,34 @@ async function submitCustomerConfirmation(decision) {
     const response = await apiPost("customerConfirm", {
       orderId: confirmationOrderId,
       token: confirmationToken,
-      decision
+      decision,
     });
 
     if (response && response.success) {
+      const isApprove = decision === "approve";
+
+      closeCustomerDecisionModal();
+
       confirmationOrder = response.order;
       renderCustomerConfirmationResult(response.message, response.order, isApprove);
+
+      showCustomerSuccessModal(isApprove ? "Pesanan Disetujui" : "Pesanan Dibatalkan", response.message || "Status pesanan berhasil diperbarui.", isApprove);
     } else {
-      alert("Gagal konfirmasi: " + ((response && response.message) || "Tidak diketahui."));
+      showCustomerSuccessModal("Gagal Konfirmasi", (response && response.message) || "Terjadi kesalahan saat memproses konfirmasi.", false);
+
       if (approveBtn) approveBtn.disabled = false;
       if (cancelBtn) cancelBtn.disabled = false;
     }
   } catch (error) {
-    alert("Error koneksi: " + error.message);
+    showCustomerSuccessModal("Error Koneksi", error.message, false);
+
     if (approveBtn) approveBtn.disabled = false;
     if (cancelBtn) cancelBtn.disabled = false;
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `Ya, Lanjutkan`;
+    }
   }
 }
 
@@ -194,29 +276,46 @@ function renderCustomerConfirmationResult(message, order, isApprove) {
 
   if (content) {
     content.innerHTML = `
-      <div class="text-center py-8">
-        <div class="w-20 h-20 mx-auto rounded-3xl ${isApprove ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-rose-500/10 text-rose-400 border-rose-500/20"} border flex items-center justify-center mb-5">
-          <i class="fa-solid ${isApprove ? "fa-circle-check" : "fa-circle-xmark"} text-4xl"></i>
+      <div class="confirm-result">
+        <div class="confirm-result-icon ${isApprove ? "success" : "danger"}">
+          <i class="fa-solid ${isApprove ? "fa-circle-check" : "fa-circle-xmark"}"></i>
         </div>
 
-        <h3 class="text-2xl font-black text-white mb-2">
-          ${isApprove ? "Pesanan Disetujui" : "Pesanan Dibatalkan"}
-        </h3>
+        <h3>${isApprove ? "Pesanan Disetujui" : "Pesanan Dibatalkan"}</h3>
 
-        <p class="text-sm text-slate-400 leading-relaxed max-w-md mx-auto">
-          ${escapeHtml(message || "Status pesanan berhasil diperbarui.")}
-        </p>
+        <p>${escapeHtml(message || "Status pesanan berhasil diperbarui.")}</p>
 
-        <div class="mt-6 bg-slate-900/70 border border-slate-800 rounded-2xl p-4 text-left max-w-md mx-auto space-y-2 text-sm">
+        <div class="confirm-info-card result-card">
           ${detailRow("Kode", order.order_id)}
-          ${detailRow("Status", order.status, isApprove ? "text-emerald-400 font-bold" : "text-rose-400 font-bold")}
+          ${detailRow("Status", order.status, isApprove ? "confirm-success-text" : "confirm-danger-text")}
           ${detailRow("Waktu", order.customer_confirmed_at || "-")}
         </div>
 
-        <a href="index.html" class="inline-flex mt-7 px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold border border-slate-700">
+        <a href="index.html" class="confirm-back-link">
           Kembali ke Beranda
         </a>
       </div>
     `;
+  }
+}
+
+function showCustomerSuccessModal(title, message, isSuccess = true) {
+  const modal = document.getElementById("customerSuccessModal");
+  const icon = document.getElementById("customerSuccessIcon");
+  const titleEl = document.getElementById("customerSuccessTitle");
+  const messageEl = document.getElementById("customerSuccessMessage");
+
+  if (titleEl) titleEl.innerText = title;
+  if (messageEl) messageEl.innerText = message;
+
+  if (icon) {
+    icon.className = isSuccess ? "customer-modal-icon customer-modal-icon-success" : "customer-modal-icon customer-modal-icon-danger";
+
+    icon.innerHTML = isSuccess ? `<i class="fa-solid fa-circle-check"></i>` : `<i class="fa-solid fa-circle-xmark"></i>`;
+  }
+
+  if (modal) {
+    document.body.appendChild(modal);
+    modal.classList.remove("hidden");
   }
 }
