@@ -12,17 +12,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="bg-[#0b0f19] text-slate-200 min-h-screen flex flex-col custom-scrollbar">
+<body class="dashboard-page dashboard-locked bg-black text-white min-h-screen flex flex-col custom-scrollbar">
 
-  <nav class="sticky top-0 z-50 glassmorphism border-b border-slate-800/60 backdrop-blur-md no-print">
+  <nav class="sticky top-0 z-50 site-nav no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
         <a href="index.html" class="flex items-center gap-3 cursor-pointer">
-          <div class="p-2.5 bg-gradient-to-tr from-sky-500 to-indigo-600 rounded-xl shadow-lg shadow-sky-500/20">
-            <i class="fa-solid fa-shoe-prints text-white text-xl transform -rotate-45"></i>
-          </div>
-          <span class="text-2xl font-bold tracking-tight text-white">
-            Shoe<span class="text-sky-400">savior</span>
+          <img src="assets/img/logo-shoesavior.png" class="brand-logo" alt="Shoesavior logo">
+          <span>
+            <span class="brand-wordmark">Shoesavior</span>
+            <span class="brand-submark">Shoe care studio</span>
           </span>
         </a>
 
@@ -32,15 +31,7 @@
           <a href="dashboard.html" id="nav-dashboard" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-sky-400 bg-slate-800/50">Dashboard</a>
         </div>
 
-        <div class="flex items-center gap-3">
-          <button id="login-nav-btn" onclick="openLoginModal()" class="text-sm font-semibold text-slate-300 hover:text-white bg-slate-800/60 px-4 py-2 rounded-xl transition-all border border-slate-700/50 hover:border-slate-600">
-            <i class="fa-solid fa-lock mr-2 text-sky-400"></i>Admin Login
-          </button>
-
-          <button id="logout-nav-btn" onclick="handleLogout()" class="hidden text-sm font-semibold text-rose-400 hover:text-rose-300 bg-rose-950/30 px-4 py-2 rounded-xl transition-all border border-rose-900/50">
-            <i class="fa-solid fa-right-from-bracket mr-2"></i>Logout
-          </button>
-        </div>
+        <div class="hidden md:block w-36"></div>
       </div>
     </div>
   </nav>
@@ -141,9 +132,19 @@
     </section>
   </main>
 
-  <footer class="bg-[#070a12] border-t border-slate-900 py-8 no-print">
-    <div class="max-w-7xl mx-auto px-4 text-center text-sm text-slate-500">
-      <p>&copy; 2026 <span class="text-slate-400 font-semibold">Shoesavior</span>. All Rights Reserved.</p>
+  <footer class="site-footer py-8 no-print">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between gap-4 text-sm">
+      <p>&copy; 2026 <span class="text-white font-black">SHOESAVIOR</span></p>
+      <div class="flex items-center gap-3">
+        <button id="footer-logout-btn" onclick="handleLogout()" class="hidden sm:inline-flex px-3 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs font-bold text-white">
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>Logout
+        </button>
+        <span id="footer-admin-label" class="hidden sm:inline text-xs uppercase font-bold">Admin nonaktif</span>
+        <button id="footer-admin-btn" onclick="handleFooterAdminClick()" class="footer-admin" type="button" aria-label="Login admin" title="Admin nonaktif">
+          <i class="fa-solid fa-lock text-xs"></i>
+          <span id="footer-admin-status" class="admin-status-dot admin-status-offline"></span>
+        </button>
+      </div>
     </div>
   </footer>
 

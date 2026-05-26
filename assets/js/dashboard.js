@@ -5,8 +5,10 @@ document.addEventListener("DOMContentLoaded", () => {
   updateDashboardAuthUI();
 
   if (isAdminLoggedIn()) {
+    setDashboardLocked(false);
     loadOrdersFromServer();
   } else {
+    setDashboardLocked(true);
     openLoginModal();
     renderDashboardLocked();
   }
@@ -14,6 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function updateDashboardAuthUI() {
   updateNavbarAuthState();
+  setDashboardLocked(!isAdminLoggedIn());
+}
+
+function setDashboardLocked(isLocked) {
+  document.body.classList.toggle("dashboard-locked", Boolean(isLocked));
 }
 
 function renderDashboardLocked() {
@@ -38,6 +45,11 @@ function openLoginModal() {
 }
 
 function closeLoginModal() {
+  if (!isAdminLoggedIn()) {
+    window.location.href = "index.html";
+    return;
+  }
+
   const modal = document.getElementById("loginModal");
   const errorText = document.getElementById("loginErrorText");
 
@@ -62,8 +74,8 @@ async function handleLoginSubmit(e) {
     const response = await adminLogin(user, pass);
 
     if (response && response.success) {
-      closeLoginModal();
       updateDashboardAuthUI();
+      closeLoginModal();
       await loadOrdersFromServer();
     } else {
       if (errorText) {

@@ -28,20 +28,59 @@ function highlightActiveNav() {
 }
 
 function updateNavbarAuthState() {
-  const loginBtn = document.getElementById("login-nav-btn");
-  const logoutBtn = document.getElementById("logout-nav-btn");
   const dashBtn = document.getElementById("nav-dashboard");
+  const footerAdminBtn = document.getElementById("footer-admin-btn");
+  const footerAdminStatus = document.getElementById("footer-admin-status");
+  const footerAdminLabel = document.getElementById("footer-admin-label");
+  const footerLogoutBtn = document.getElementById("footer-logout-btn");
+  const loggedIn = isAdminLoggedIn();
 
-  if (!loginBtn || !logoutBtn || !dashBtn) return;
+  if (dashBtn) {
+    if (loggedIn) {
+      dashBtn.classList.remove("hidden");
+    } else {
+      dashBtn.classList.add("hidden");
+    }
+  }
 
+  if (footerAdminBtn) {
+    footerAdminBtn.setAttribute("aria-label", loggedIn ? "Buka dashboard admin" : "Login admin");
+    footerAdminBtn.title = loggedIn ? "Admin aktif" : "Admin nonaktif";
+
+    const icon = footerAdminBtn.querySelector("i");
+    if (icon) {
+      icon.className = loggedIn ? "fa-solid fa-unlock text-xs" : "fa-solid fa-lock text-xs";
+    }
+  }
+
+  if (footerAdminStatus) {
+    footerAdminStatus.classList.toggle("admin-status-online", loggedIn);
+    footerAdminStatus.classList.toggle("admin-status-offline", !loggedIn);
+  }
+
+  if (footerAdminLabel) {
+    footerAdminLabel.innerText = loggedIn ? "Admin aktif" : "Admin nonaktif";
+  }
+
+  if (footerLogoutBtn) {
+    footerLogoutBtn.classList.toggle("hidden", !loggedIn);
+  }
+
+  if (document.body.classList.contains("dashboard-page")) {
+    document.body.classList.toggle("dashboard-locked", !loggedIn);
+  }
+}
+
+function handleFooterAdminClick() {
   if (isAdminLoggedIn()) {
-    loginBtn.classList.add("hidden");
-    logoutBtn.classList.remove("hidden");
-    dashBtn.classList.remove("hidden");
+    window.location.href = "dashboard.html";
+    return;
+  }
+
+  if (typeof openLoginModal === "function") {
+    openLoginModal();
   } else {
-    loginBtn.classList.remove("hidden");
-    logoutBtn.classList.add("hidden");
-    dashBtn.classList.add("hidden");
+    window.location.href = "dashboard.html";
   }
 }
 
@@ -49,8 +88,4 @@ function handleLogout() {
   clearAdminToken();
   updateNavbarAuthState();
   window.location.href = "index.html";
-}
-
-function goToAdmin() {
-  window.location.href = "dashboard.html";
 }
