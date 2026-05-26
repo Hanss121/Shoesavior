@@ -1,12 +1,4 @@
-// ======================================================
-// SHOESAVIOR FRONTEND API CLIENT
-// ======================================================
-// Ganti URL di bawah dengan URL Web App GAS /exec kamu.
-// Contoh:
-// const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxxxx/exec";
-// ======================================================
-
-const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxm9QJ0nfsfY7LodahVYKyG5YMjGGnhQA7M_Gkc_OvVp4zmzFuu_Xdi1cujJy0ee9aY/exec";
+const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwrWwoJoHIP-17-s3arrUcmfWKA2qxhVS_cK0YzR7mXtjPpZ70yDvoEekRW8x7Kq3AM/exec";
 const ADMIN_TOKEN_KEY = "shoesavior_admin_token";
 
 function ensureApiConfigured() {
