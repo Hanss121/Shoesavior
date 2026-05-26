@@ -17,7 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/style.css?v=3" />
+    <link rel="stylesheet" href="assets/css/style.css?v=13" />
   </head>
 
   <body class="home-page min-h-screen flex flex-col custom-scrollbar">
@@ -48,19 +48,14 @@
     </nav>
 
     <main class="flex-grow">
-      <!-- HERO V2 -->
-      <section class="home-hero home-hero-bg">
+      <!-- HERO BACKGROUND -->
+      <section class="home-hero home-hero-bg -mt-2">
         <div class="hero-bg-image"></div>
         <div class="hero-bg-overlay"></div>
         <div class="hero-grid-pattern"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full hero-shell">
-          <div class="hero-copy-wrap">
-            <span class="hero-kicker mb-6">
-              <i class="fa-solid fa-soap"></i>
-              Premium shoe cleaning studio
-            </span>
-
+          <div class="hero-copy-wrap reveal-up">
             <h1 class="home-title hero-title-bg mb-6">
               Clean shoes.<br />
               <span>Clean look.</span>
@@ -68,39 +63,42 @@
 
             <p class="home-copy hero-copy-bg mb-8">Upload foto sepatu, dapat estimasi harga lewat WhatsApp, lalu pantau proses perawatan sampai selesai. Dibersihkan detail sesuai bahan, kondisi, dan tingkat kotoran.</p>
 
-            <div class="flex flex-col sm:flex-row gap-3 mb-8">
+            <div class="flex flex-col sm:flex-row gap-3">
               <a href="layanan.html" class="primary-cta hero-main-cta">
                 <i class="fa-solid fa-paper-plane"></i>
                 Pesan Sekarang
               </a>
+
               <a href="#hasil" class="secondary-cta hero-secondary-cta">
                 <i class="fa-solid fa-images"></i>
                 Lihat Before / After
               </a>
             </div>
-
-            <div class="hero-trust-row hero-trust-row-bg">
-              <div class="hero-trust-item">
-                <strong>2–4 Hari</strong>
-                <span>Estimasi proses</span>
-              </div>
-              <div class="hero-trust-item">
-                <strong>WA</strong>
-                <span>Konfirmasi harga</span>
-              </div>
-              <div class="hero-trust-item">
-                <strong>Live</strong>
-                <span>Tracking status</span>
-              </div>
-            </div>
           </div>
         </div>
 
+        <!-- FLOATING CARDS -->
         <div class="hero-floating-info hero-floating-info-top">
           <i class="fa-solid fa-camera"></i>
           <div>
-            <strong>Upload foto</strong>
-            <span>Max 5MB per gambar</span>
+            <strong>Live</strong>
+            <span>Tracking status proses</span>
+          </div>
+        </div>
+
+        <div class="hero-floating-info hero-floating-estimasi">
+          <i class="fa-regular fa-clock"></i>
+          <div>
+            <strong>2–4 Hari</strong>
+            <span>Estimasi proses</span>
+          </div>
+        </div>
+
+        <div class="hero-floating-info hero-floating-wa">
+          <i class="fa-brands fa-whatsapp"></i>
+          <div>
+            <strong>WA</strong>
+            <span>Konfirmasi harga</span>
           </div>
         </div>
 
@@ -111,13 +109,6 @@
             <span>Konfirmasi via WhatsApp</span>
           </div>
         </div>
-
-        <div class="hero-floating-pill hero-pill-left">
-          <span></span>
-          CS Online
-        </div>
-
-        <div class="hero-floating-pill hero-pill-right">Treatment Detail</div>
       </section>
 
       <!-- EXPERIENCE STRIP -->
@@ -156,6 +147,7 @@
               </span>
               <h2 class="text-4xl sm:text-6xl font-black leading-none">Perawatan sesuai bahan.</h2>
             </div>
+
             <p class="text-neutral-600 text-lg leading-relaxed">Beda material, beda treatment. Kami pisahkan proses untuk canvas, knit, leather, suede, midsole, dan outsole supaya hasil bersih tanpa merusak tekstur sepatu.</p>
           </div>
 
@@ -201,6 +193,7 @@
               </span>
               <h2 class="text-4xl sm:text-6xl font-black leading-none">Hasil yang bisa dilihat.</h2>
             </div>
+
             <a href="layanan.html" class="primary-cta w-full sm:w-auto">
               <i class="fa-solid fa-camera"></i>
               Kirim Foto Sepatu
@@ -208,7 +201,7 @@
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <article class="before-after-card reveal-up">
+            <article class="before-after-card ba-open-card reveal-up" role="button" tabindex="0" data-before="assets/img/work/before-canvas.webp" data-after="assets/img/work/after-canvas.webp" onclick="openBeforeAfterModal(this)">
               <div class="before-after-grid">
                 <figure>
                   <img src="assets/img/work/before-canvas.webp" alt="Sepatu canvas sebelum dicuci" />
@@ -219,13 +212,21 @@
                   <span class="ba-label">After</span>
                 </figure>
               </div>
+
               <div class="p-5">
                 <h3 class="text-xl font-black">Canvas Deep Clean</h3>
                 <p class="text-sm text-neutral-600 mt-1">Mengangkat noda di canvas, pinggiran midsole, dan area tali.</p>
               </div>
             </article>
 
-            <article class="before-after-card reveal-up reveal-delay-1">
+            <article
+              class="before-after-card ba-open-card reveal-up reveal-delay-1"
+              role="button"
+              tabindex="0"
+              data-before="assets/img/work/before-sole.webp"
+              data-after="assets/img/work/after-sole.webp"
+              onclick="openBeforeAfterModal(this)"
+            >
               <div class="before-after-grid">
                 <figure>
                   <img src="assets/img/work/before-sole.webp" alt="Outsole sebelum dicuci" />
@@ -236,6 +237,7 @@
                   <span class="ba-label">After</span>
                 </figure>
               </div>
+
               <div class="p-5">
                 <h3 class="text-xl font-black">Outsole Detailing</h3>
                 <p class="text-sm text-neutral-600 mt-1">Membersihkan debu dan tanah di sela tapak outsole.</p>
@@ -303,6 +305,28 @@
       </section>
     </main>
 
+    <!-- BEFORE AFTER MODAL -->
+    <div id="beforeAfterModal" class="ba-modal" aria-hidden="true">
+      <div class="ba-modal-backdrop" onclick="closeBeforeAfterModal()"></div>
+
+      <div class="ba-modal-full">
+        <button class="ba-modal-close" type="button" onclick="closeBeforeAfterModal()" aria-label="Tutup">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div id="baCompare" class="ba-compare-full" style="--ba-position: 50%">
+          <img id="baBeforeImg" class="ba-compare-img ba-before-img" src="" alt="Before" />
+          <img id="baAfterImg" class="ba-compare-img ba-after-img" src="" alt="After" />
+
+          <div class="ba-compare-line">
+            <span>
+              <i class="fa-solid fa-arrows-left-right"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- FOOTER -->
     <footer class="site-footer py-8">
       <div class="max-w-7xl mx-auto px-4 flex items-center justify-between gap-4 text-sm">
@@ -322,6 +346,6 @@
     <!-- SCRIPT -->
     <script src="assets/js/api.js"></script>
     <script src="assets/js/utils.js"></script>
-    <script src="assets/js/common.js"></script>
+    <script src="assets/js/common.js?v=3"></script>
   </body>
 </html>

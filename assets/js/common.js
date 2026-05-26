@@ -1,10 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
   highlightActiveNav();
   updateNavbarAuthState();
+  handleNavbarScroll();
+  initRevealAnimation();
+  initTiltCards();
+  initBeforeAfterModal();
 });
+
+/* =========================
+   NAVBAR
+========================= */
 
 function highlightActiveNav() {
   const currentPath = window.location.pathname.split("/").pop() || "index.html";
+
   const map = {
     "index.html": "nav-home",
     "": "nav-home",
@@ -16,14 +25,17 @@ function highlightActiveNav() {
   const activeId = map[currentPath] || "nav-home";
 
   document.querySelectorAll("[data-nav-link]").forEach((el) => {
-    el.classList.remove("text-sky-400", "bg-slate-800/50");
+    el.classList.remove("text-sky-400", "bg-slate-800/50", "is-active");
     el.classList.add("text-slate-400", "hover:text-white", "hover:bg-slate-800/30");
+    el.removeAttribute("aria-current");
   });
 
   const active = document.getElementById(activeId);
+
   if (active) {
-    active.classList.add("text-sky-400", "bg-slate-800/50");
+    active.classList.add("text-sky-400", "bg-slate-800/50", "is-active");
     active.classList.remove("text-slate-400", "hover:text-white", "hover:bg-slate-800/30");
+    active.setAttribute("aria-current", "page");
   }
 }
 
@@ -33,19 +45,19 @@ function updateNavbarAuthState() {
   const footerAdminStatus = document.getElementById("footer-admin-status");
   const footerAdminLabel = document.getElementById("footer-admin-label");
   const footerLogoutBtn = document.getElementById("footer-logout-btn");
-  const loggedIn = isAdminLoggedIn();
+
+  const loggedIn = typeof isAdminLoggedIn === "function" ? isAdminLoggedIn() : false;
 
   if (dashBtn) {
-    if (loggedIn) {
-      dashBtn.classList.remove("hidden");
-    } else {
-      dashBtn.classList.add("hidden");
-    }
+    dashBtn.classList.toggle("hidden", !loggedIn);
   }
 
   if (footerAdminBtn) {
     footerAdminBtn.setAttribute("aria-label", loggedIn ? "Buka dashboard admin" : "Login admin");
+
     footerAdminBtn.title = loggedIn ? "Admin aktif" : "Admin nonaktif";
+    footerAdminBtn.classList.toggle("admin-logged-in", loggedIn);
+    footerAdminBtn.classList.toggle("admin-logged-out", !loggedIn);
 
     const icon = footerAdminBtn.querySelector("i");
     if (icon) {
@@ -71,8 +83,20 @@ function updateNavbarAuthState() {
   }
 }
 
+function handleNavbarScroll() {
+  const nav = document.querySelector(".site-nav");
+  if (!nav) return;
+
+  const update = () => {
+    nav.classList.toggle("is-scrolled", window.scrollY > 10);
+  };
+
+  update();
+  window.addEventListener("scroll", update, { passive: true });
+}
+
 function handleFooterAdminClick() {
-  if (isAdminLoggedIn()) {
+  if (typeof isAdminLoggedIn === "function" && isAdminLoggedIn()) {
     window.location.href = "dashboard.html";
     return;
   }
@@ -85,14 +109,17 @@ function handleFooterAdminClick() {
 }
 
 function handleLogout() {
-  clearAdminToken();
+  if (typeof clearAdminToken === "function") {
+    clearAdminToken();
+  }
+
   updateNavbarAuthState();
   window.location.href = "index.html";
 }
-document.addEventListener("DOMContentLoaded", () => {
-  initRevealAnimation();
-  initTiltCards();
-});
+
+/* =========================
+   REVEAL ANIMATION
+========================= */
 
 function initRevealAnimation() {
   const elements = document.querySelectorAll(".reveal-up");
@@ -123,6 +150,10 @@ function initRevealAnimation() {
   elements.forEach((el) => observer.observe(el));
 }
 
+/* =========================
+   TILT CARD
+========================= */
+
 function initTiltCards() {
   const cards = document.querySelectorAll(".tilt-card");
 
@@ -145,3 +176,113 @@ function initTiltCards() {
     });
   });
 }
+
+/* =========================
+   BEFORE AFTER POPUP
+========================= */
+
+let baCompareDragging = false;
+
+function initBeforeAfterModal() {
+  const modal = document.getElementById("beforeAfterModal");
+  const compare = document.getElementById("baCompare");
+
+  if (!modal || !compare) {
+    console.warn("Before/After modal belum ditemukan. Cek HTML modal di index.html.");
+    return;
+  }
+
+  compare.addEventListener("pointerdown", (event) => {
+    baCompareDragging = true;
+    compare.setPointerCapture(event.pointerId);
+    updateBeforeAfterPosition(event);
+  });
+
+  compare.addEventListener("pointermove", (event) => {
+    if (!baCompareDragging && event.pointerType !== "mouse") return;
+    updateBeforeAfterPosition(event);
+  });
+
+  compare.addEventListener("pointerup", () => {
+    baCompareDragging = false;
+  });
+
+  compare.addEventListener("pointercancel", () => {
+    baCompareDragging = false;
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.classList.contains("is-open")) {
+      closeBeforeAfterModal();
+    }
+
+    if (event.key === "Enter") {
+      const activeCard = document.activeElement;
+      if (activeCard && activeCard.classList.contains("ba-open-card")) {
+        openBeforeAfterModal(activeCard);
+      }
+    }
+  });
+}
+
+function openBeforeAfterModal(card) {
+  const modal = document.getElementById("beforeAfterModal");
+  const compare = document.getElementById("baCompare");
+  const beforeImg = document.getElementById("baBeforeImg");
+  const afterImg = document.getElementById("baAfterImg");
+
+  if (!modal || !compare || !beforeImg || !afterImg) {
+    console.warn("Element modal before-after belum lengkap.");
+    return;
+  }
+
+  const beforeSrc = card.getAttribute("data-before");
+  const afterSrc = card.getAttribute("data-after");
+
+  if (!beforeSrc || !afterSrc) {
+    console.warn("Card belum punya data-before atau data-after.");
+    return;
+  }
+
+  beforeImg.src = beforeSrc;
+  afterImg.src = afterSrc;
+
+  compare.style.setProperty("--ba-position", "50%");
+
+  modal.classList.add("is-open");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeBeforeAfterModal() {
+  const modal = document.getElementById("beforeAfterModal");
+
+  if (!modal) return;
+
+  modal.classList.remove("is-open");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+function updateBeforeAfterPosition(event) {
+  const compare = document.getElementById("baCompare");
+  if (!compare) return;
+
+  const rect = compare.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+
+  let percent = (x / rect.width) * 100;
+  percent = Math.max(2, Math.min(98, percent));
+
+  compare.style.setProperty("--ba-position", `${percent}%`);
+}
+
+/* =========================
+   GLOBAL FUNCTIONS
+========================= */
+
+window.handleFooterAdminClick = handleFooterAdminClick;
+window.handleLogout = handleLogout;
+window.updateNavbarAuthState = updateNavbarAuthState;
+window.openBeforeAfterModal = openBeforeAfterModal;
+window.closeBeforeAfterModal = closeBeforeAfterModal;
