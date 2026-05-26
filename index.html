@@ -25,6 +25,7 @@
     <nav class="sticky top-0 z-50 site-nav">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-20">
+          <!-- Logo kiri -->
           <a href="index.html" class="flex items-center gap-3 cursor-pointer">
             <img src="assets/img/logo-shoesavior.png" class="brand-logo" alt="Shoesavior logo" />
             <span>
@@ -33,22 +34,28 @@
             </span>
           </a>
 
+          <!-- Menu desktop -->
           <div class="hidden md:flex items-center space-x-2">
             <a href="index.html" id="nav-home" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-sky-400 bg-slate-800/50"> Beranda </a>
+
             <a href="layanan.html" id="nav-services" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30"> Pelayanan </a>
+
             <a href="pesanan.html" id="nav-orders" data-nav-link class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30"> Cek Pesanan </a>
+
             <a href="dashboard.html" id="nav-dashboard" data-nav-link class="hidden px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30"> Dashboard </a>
           </div>
 
+          <!-- Tombol desktop -->
           <a href="layanan.html" class="hidden md:inline-flex primary-cta min-h-0 h-11 px-5 text-sm">
             <i class="fa-solid fa-paper-plane"></i>
             Pesan Sekarang
           </a>
-        </div>
-        <div class="mobile-nav-scroll">
-          <a href="index.html" data-mobile-nav-link class="mobile-nav-link"><i class="fa-solid fa-house"></i>Beranda</a>
-          <a href="layanan.html" data-mobile-nav-link class="mobile-nav-link"><i class="fa-solid fa-soap"></i>Pelayanan</a>
-          <a href="pesanan.html" data-mobile-nav-link class="mobile-nav-link"><i class="fa-solid fa-magnifying-glass"></i>Cek Pesanan</a>
+
+          <!-- Tombol mobile kanan sejajar logo -->
+          <a href="pesanan.html" class="md:hidden inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition">
+            <i class="fa-solid fa-magnifying-glass text-[11px]"></i>
+            Cek Pesanan
+          </a>
         </div>
       </div>
     </nav>
