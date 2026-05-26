@@ -38,6 +38,19 @@ function highlightActiveNav() {
     active.classList.remove("text-slate-400", "hover:text-white", "hover:bg-slate-800/30");
     active.setAttribute("aria-current", "page");
   }
+
+  document.querySelectorAll("[data-mobile-nav-link]").forEach((el) => {
+    const hrefPath = (el.getAttribute("href") || "").split("?")[0].split("#")[0];
+    const isActive = hrefPath === currentPath || (currentPath === "" && hrefPath === "index.html");
+
+    el.classList.toggle("is-active", isActive);
+
+    if (isActive) {
+      el.setAttribute("aria-current", "page");
+    } else {
+      el.removeAttribute("aria-current");
+    }
+  });
 }
 
 function updateNavbarAuthState() {
