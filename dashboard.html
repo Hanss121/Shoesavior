@@ -145,40 +145,46 @@
     </footer>
 
     <div id="loginModal" class="fixed inset-0 z-50 overflow-y-auto hidden no-print">
-      <div class="flex items-center justify-center min-h-screen px-4">
-        <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeLoginModal()"></div>
-        <div class="inline-block align-middle glassmorphism border border-slate-800 rounded-3xl overflow-hidden shadow-2xl transform transition-all max-w-sm w-full p-6 relative z-10">
-          <div class="text-center mb-6">
-            <div class="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center mx-auto mb-3">
-              <i class="fa-solid fa-user-gear text-sky-400 text-lg"></i>
+      <div class="flex items-center justify-center min-h-screen px-4 py-8">
+        <div class="fixed inset-0 dashboard-login-backdrop" onclick="closeLoginModal()"></div>
+
+        <div class="dashboard-login-panel relative z-10">
+          <div class="dashboard-login-header">
+            <div class="dashboard-login-icon">
+              <i class="fa-solid fa-user-gear"></i>
             </div>
-            <h3 class="text-lg font-bold text-white">Autentikasi Admin Owner</h3>
-            <p class="text-xs text-slate-400 mt-1">Gunakan kredensial admin dari API GAS untuk mengelola antrean Shoesavior.</p>
+
+            <h3>Login Admin Owner</h3>
+            <p>Masuk untuk mengelola antrean, tinjauan harga, status pesanan, dan nota Shoesavior.</p>
           </div>
 
-          <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Username</label>
-              <input
-                type="text"
-                id="adminUser"
-                required
-                class="w-full bg-[#131926] border border-slate-800 rounded-xl py-2.5 px-3 text-xs text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
-                placeholder="admin"
-              />
+          <form onsubmit="handleLoginSubmit(event)" class="dashboard-login-form">
+            <div class="dashboard-login-field">
+              <label for="adminUser">Username</label>
+              <div class="dashboard-login-input-wrap">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="adminUser" required autocomplete="username" placeholder="admin" />
+              </div>
             </div>
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Password</label>
-              <input
-                type="password"
-                id="adminPass"
-                required
-                class="w-full bg-[#131926] border border-slate-800 rounded-xl py-2.5 px-3 text-xs text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
-                placeholder="••••••••"
-              />
+
+            <div class="dashboard-login-field">
+              <label for="adminPass">Password</label>
+              <div class="dashboard-login-input-wrap">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="adminPass" required autocomplete="current-password" placeholder="Masukkan password" />
+
+                <button type="button" class="dashboard-password-toggle" onclick="toggleAdminPassword()" aria-label="Tampilkan atau sembunyikan password">
+                  <i id="adminPasswordToggleIcon" class="fa-solid fa-eye"></i>
+                  <span id="adminPasswordToggleLabel">Lihat</span>
+                </button>
+              </div>
             </div>
-            <div id="loginErrorText" class="hidden text-[11px] text-rose-400 font-medium bg-rose-950/20 p-2 rounded-lg border border-rose-900/30 text-center">Kredensial salah. Silakan coba kembali.</div>
-            <button id="adminLoginSubmitBtn" type="submit" class="w-full py-3 bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold text-xs rounded-xl shadow-lg transition-all">Masuk ke System Dashboard</button>
+
+            <div id="loginErrorText" class="dashboard-login-error hidden">Kredensial salah. Silakan coba kembali.</div>
+
+            <button id="adminLoginSubmitBtn" type="submit" class="dashboard-login-submit">
+              <span>Masuk ke Dashboard</span>
+            </button>
           </form>
         </div>
       </div>

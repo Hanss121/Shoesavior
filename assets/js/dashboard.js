@@ -109,8 +109,10 @@ async function handleLoginSubmit(e) {
   if (errorText) errorText.classList.add("hidden");
 
   loginBtn.disabled = true;
-  loginBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Memeriksa...`;
-
+  loginBtn.innerHTML = `
+    <i class="fa-solid fa-spinner fa-spin"></i>
+    <span>Memeriksa...</span>
+  `;
   try {
     const response = await adminLogin(user, pass);
 
@@ -131,7 +133,7 @@ async function handleLoginSubmit(e) {
     }
   } finally {
     loginBtn.disabled = false;
-    loginBtn.innerHTML = `Masuk ke System Dashboard`;
+    loginBtn.innerHTML = `<span>Masuk ke Dashboard</span>`;
   }
 }
 
@@ -783,4 +785,23 @@ function openInvoice(orderId) {
 function closeInvoiceModal() {
   const modal = document.getElementById("invoiceModal");
   if (modal) modal.classList.add("hidden");
+}
+function toggleAdminPassword() {
+  const input = document.getElementById("adminPass");
+  const icon = document.getElementById("adminPasswordToggleIcon");
+  const label = document.getElementById("adminPasswordToggleLabel");
+
+  if (!input) return;
+
+  const isHidden = input.type === "password";
+
+  input.type = isHidden ? "text" : "password";
+
+  if (icon) {
+    icon.className = isHidden ? "fa-solid fa-eye-slash" : "fa-solid fa-eye";
+  }
+
+  if (label) {
+    label.innerText = isHidden ? "Sembunyikan" : "Lihat";
+  }
 }
