@@ -6,7 +6,7 @@
 // const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxxxx/exec";
 // ======================================================
 
-const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxfSdTQ1_Nwcd1ygCyDSeJWTwof9dl7-G3YPo8JJriKVANGX9aEVozxUbM5xpsQ4KS2/exec";
+const GAS_API_URL = "https://script.google.com/macros/s/AKfycbyQSp0UhZ91H9s2pSqvxlI7z0W-yOCKHzm2CmPkU2gLDY4OZusi4eMLRWJv_PuQ8u5Y/exec";
 const ADMIN_TOKEN_KEY = "shoesavior_admin_token";
 
 function ensureApiConfigured() {
