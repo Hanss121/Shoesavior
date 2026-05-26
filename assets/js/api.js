@@ -6,7 +6,7 @@
 // const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxxxx/exec";
 // ======================================================
 
-const GAS_API_URL = "ISI_URL_WEB_APP_GAS_EXEC_KAMU";
+const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxfSdTQ1_Nwcd1ygCyDSeJWTwof9dl7-G3YPo8JJriKVANGX9aEVozxUbM5xpsQ4KS2/exec";
 const ADMIN_TOKEN_KEY = "shoesavior_admin_token";
 
 function ensureApiConfigured() {
@@ -29,7 +29,7 @@ async function apiGet(action, params = {}) {
 
   const response = await fetch(url.toString(), {
     method: "GET",
-    redirect: "follow"
+    redirect: "follow",
   });
 
   if (!response.ok) {
@@ -47,12 +47,12 @@ async function apiPost(action, payload = {}) {
     redirect: "follow",
     headers: {
       // text/plain membuat request tetap sederhana dan cocok untuk Apps Script Web App.
-      "Content-Type": "text/plain;charset=utf-8"
+      "Content-Type": "text/plain;charset=utf-8",
     },
     body: JSON.stringify({
       action,
-      ...payload
-    })
+      ...payload,
+    }),
   });
 
   if (!response.ok) {
@@ -81,7 +81,7 @@ function isAdminLoggedIn() {
 async function adminLogin(username, password) {
   const response = await apiPost("adminLogin", {
     username,
-    password
+    password,
   });
 
   if (response && response.success && response.adminToken) {
@@ -100,7 +100,7 @@ async function apiAdminPost(action, payload = {}) {
 
   const response = await apiPost(action, {
     ...payload,
-    adminToken
+    adminToken,
   });
 
   if (response && response.success === false) {
